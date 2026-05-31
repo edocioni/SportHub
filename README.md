@@ -19,7 +19,6 @@ Il progetto copre l'intera infrastruttura: rete fisica, database relazionale e a
 | `database.sql` | DDL completo — creazione tabelle e vincoli |
 | `query.sql` | 7 query SQL (Q1–Q5 analisi + Q6–Q7 PHP) |
 | `piano di indirizzamento.pdf` | Piano IP e VLAN (blocco 172.20.0.0/16) |
-| `gestione_guasti` | Scenari di guasto e soluzioni (wireless, VPN, backup) |
 | `php/` | Applicazione web PHP con prepared statement |
 | `images/` | Immagini e risorse grafiche del progetto |
 | `SportHub.pdf` | Documentazione completa del progetto |
