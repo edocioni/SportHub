@@ -2,25 +2,31 @@
     require "db_connection.php";
     $data = $_POST["data"];
     $query = "
-        SELECT L.ID_Lezione,
-        TIME(L.DataOra) AS Ora, DATE(L.DataOra) AS Data,
-        L.Durata_Minuti,
-        C.Nome AS NomeCorso,
-        S.Nome AS NomeSala,
-        CONCAT(I.Nome,' ',I.Cognome) AS Istruttore,
-        COUNT(P.ID_Prenotazione) AS PostiOccupati,
-        (S.Capienza - COUNT(P.ID_Prenotazione)) AS PostiLiberi,
-        ROUND(COUNT(P.ID_Prenotazione) / S.Capienza * 100, 1) AS PercentualeRiempimento
-        FROM Lezione L 
-        INNER JOIN Sala S ON L.ID_Sala=S.ID_Sala
-        INNER JOIN Istruttore I ON L.ID_Istruttore=I.ID_Istruttore
-        INNER JOIN Corso C ON L.ID_Corso=C.ID_Corso
-        LEFT JOIN Prenotazione P ON L.ID_Lezione=P.ID_Lezione 
-        AND P.Stato='Confermato'
+        SELECT
+            L.ID_Lezione,
+            TIME(L.DataOra) AS Ora,
+            DATE(L.DataOra) AS Data,
+            L.Durata_Minuti,
+            C.Nome AS NomeCorso,
+            S.Nome AS NomeSala,
+            CONCAT(I.Nome, ' ', I.Cognome) AS Istruttore,
+            COUNT(P.ID_Prenotazione) AS PostiOccupati,
+            (S.Capienza - COUNT(P.ID_Prenotazione)) AS PostiLiberi,
+            ROUND(COUNT(P.ID_Prenotazione) / S.Capienza * 100, 1) AS PercentualeRiempimento
+        FROM Lezione AS L
+        INNER JOIN Sala AS S
+            ON L.ID_Sala = S.ID_Sala
+        INNER JOIN Istruttore AS I
+            ON L.ID_Istruttore = I.ID_Istruttore
+        INNER JOIN Corso AS C
+            ON L.ID_Corso = C.ID_Corso
+        LEFT JOIN Prenotazione AS P
+            ON L.ID_Lezione = P.ID_Lezione
+            AND P.Stato = 'Confermato'
         WHERE DATE(L.DataOra) = ?
-        AND L.DataOra > NOW()
+          AND L.DataOra > NOW()
         GROUP BY L.ID_Lezione
-        HAVING COUNT(P.ID_Prenotazione) < S.Capienza
+        HAVING COUNT(P.ID_Prenotazione) < MAX(S.Capienza)
         ORDER BY L.DataOra
     ";
     $stmt = $connection->prepare($query);

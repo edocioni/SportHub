@@ -2,21 +2,29 @@
     require "db_connection.php";
     $CF = $_POST["CF"];
     $query = "
-        SELECT  P.ID_Prenotazione, P.DataPrenotazione, P.Stato, 
-        L.ID_Lezione, L.DataOra, L.Durata_Minuti, 
-        CONCAT(I.Nome,' ',I.Cognome), 
-        (
-            SELECT A.DataOra
-            FROM Accesso A
-            WHERE A.CF_Frequentatore=F.CF
-            GROUP BY A.DataOra DESC
-            LIMIT 1
-        ) AS Ultimo Accesso
-        FROM Frequentatore F
-        INNER JOIN Prenotazione P ON F.CF=P.CF_Frequentatore
-        INNER JOIN Lezione L ON P.ID_Lezione=L.ID_Lezione
-        INNER JOIN Istruttore ON L.ID_Istruttore=I.ID_Istruttore
-        WHERE F.CF= ?
+        SELECT
+            P.ID_Prenotazione,
+            P.DataPrenotazione,
+            P.Stato,
+            L.ID_Lezione,
+            L.DataOra,
+            L.Durata_Minuti,
+            CONCAT(I.Nome, ' ', I.Cognome) AS Istruttore,
+            (
+                SELECT A.DataOra
+                FROM Accesso AS A
+                WHERE A.CF_Frequentatore = F.CF
+                ORDER BY A.DataOra DESC
+                LIMIT 1
+            ) AS `Ultimo Accesso`
+        FROM Frequentatore AS F
+        INNER JOIN Prenotazione AS P
+            ON F.CF = P.CF_Frequentatore
+        INNER JOIN Lezione AS L
+            ON P.ID_Lezione = L.ID_Lezione
+        INNER JOIN Istruttore AS I
+            ON L.ID_Istruttore = I.ID_Istruttore
+        WHERE F.CF = ?
         ORDER BY L.DataOra DESC;
     ";
     $stmt = $connection->prepare($query);
@@ -46,35 +54,6 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            padding-top: 180px;
-        }
-        
-        .welcome-section {
-            text-align: center;
-            position: fixed;
-            top: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 999;
-            pointer-events: none;
-        }
-        
-        .welcome-section h2 {
-            color: #ffffff;
-            font-size: 20px;
-            margin-bottom: 8px;
-            font-weight: 300;
-            letter-spacing: 1px;
-            pointer-events: auto;
-        }
-        
-        .logo {
-            max-width: 260px;
-            width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            pointer-events: auto;
         }
         
         .container {
@@ -85,7 +64,7 @@
             max-width: 900px;
             width: 100%;
         }
-        
+
         h1 {
             color: #ffffff;
             margin-bottom: 30px;
@@ -167,11 +146,6 @@
     </style>
 </head>
 <body>
-    <div class="welcome-section">
-        <h2>Benvenuti in</h2>
-        <img src="../images/logo nero.png" alt="SportHub Logo" class="logo">
-    </div>
-    
     <div class="container">
         <h1>Lezioni Disponibili</h1>
     <?php
@@ -186,7 +160,7 @@
                   <td>{$row['DataPrenotazione']}</td>
                   <td>{$row['DataOra']}</td>
                   <td>{$row['Durata_Minuti']}</td>
-                  <td>{$row['Nome']} {$row['Cognome']}</td>
+                  <td>{$row['Istruttore']}</td>
                   <td>{$row['Ultimo Accesso']}</td>
                   </tr>";
         }
@@ -197,7 +171,7 @@
     ?>
     
     <div style="text-align: center;">
-        <a href="form1.html" class="back-link">← Torna al form</a>
+        <a href="form2.html" class="back-link">← Torna al form</a>
     </div>
     </div>
 </body>
