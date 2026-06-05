@@ -237,7 +237,7 @@ SELECT
     L.ID_Lezione,
     L.DataOra,
     L.Durata_Minuti,
-    CONCAT(I.Nome, ' ', I.Cognome),
+    CONCAT(I.Nome, ' ', I.Cognome) AS Istruttore,
     (
         SELECT A.DataOra
         FROM Accesso AS A

@@ -36,7 +36,7 @@ Il progetto copre l'intera infrastruttura: rete fisica, database relazionale e a
 
 ## Panoramica tecnica
 
-**Rete** — Architettura gerarchica a tre livelli, 6 VLAN (blocco 172.20.0.0/16), routing inter-VLAN via SVI, firewall ASA 5506-X con DMZ, VPN IPsec IKEv2 AES-256, AAA/RADIUS, backup 3-2-1-0.
+**Rete** — Architettura gerarchica a tre livelli, 6 VLAN (blocco 172.20.0.0/16), routing inter-VLAN via SVI, firewall ASA 5506-X con DMZ, VPN IPsec IKEv2 AES-256, AAA/RADIUS, backup 3-2-1-1-0.
 
 **Database** — Schema MySQL con 11 tabelle, normalizzazione, query con JOIN multipli, subquery correlate, NOT EXISTS e divisione relazionale.
 
