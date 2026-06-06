@@ -220,7 +220,7 @@ LEFT JOIN Prenotazione AS P
     AND P.Stato = 'Confermato'
 WHERE DATE(L.DataOra) = '2026-05-16'
   AND L.DataOra > NOW()
-GROUP BY L.ID_Lezione
+GROUP BY L.ID_Lezione, S.Capienza
 HAVING COUNT(ID_Prenotazione) < S.Capienza
 ORDER BY L.DataOra;
 
@@ -242,7 +242,7 @@ SELECT
         SELECT A.DataOra
         FROM Accesso AS A
         WHERE A.CF_Frequentatore = F.CF
-        GROUP BY A.DataOra DESC
+        ORDER BY A.DataOra DESC
         LIMIT 1
     ) AS `Ultimo Accesso`
 FROM Frequentatore AS F

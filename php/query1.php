@@ -1,5 +1,8 @@
 <?php
-    require "db_connection.php";
+    $connection=new mysqli("localhost","root","","sporthub");
+    if($connection->connect_error){
+        die("Errore di connessione". $connection->connect_error);
+    }
     $data = $_POST["data"];
     $query = "
         SELECT
@@ -25,7 +28,7 @@
             AND P.Stato = 'Confermato'
         WHERE DATE(L.DataOra) = ?
           AND L.DataOra > NOW()
-        GROUP BY L.ID_Lezione
+        GROUP BY L.ID_Lezione, S.Capienza
         HAVING COUNT(P.ID_Prenotazione) < MAX(S.Capienza)
         ORDER BY L.DataOra
     ";
@@ -92,10 +95,14 @@
             border-radius: 10px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             padding: 40px;
-            max-width: 900px;
+            max-width: 1100px;  /* era 900px */
             width: 100%;
         }
-        
+
+        td, th {
+            padding: 10px 12px;  /* era 12px 16px */
+        }
+                
         h1 {
             color: #ffffff;
             margin-bottom: 30px;
